@@ -65,9 +65,9 @@ backend/     - Go REST API (minimal, just a thin layer over Spanner)
 ### Frontend
 ```
 cd frontend
-npm install
-npm run dev      # development server
-npm test         # run tests
+bun install
+bun run dev      # development server
+bun test         # run tests
 ```
 
 ### Backend
