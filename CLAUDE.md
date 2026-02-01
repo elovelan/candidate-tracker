@@ -1,12 +1,14 @@
 # Candidate Tracker
 
-A job application tracking tool with a React/TypeScript frontend and a minimal Go backend backed by GCP Spanner.
+A job application tracking tool with a React/TypeScript frontend. Currently uses localStorage for fast UX iteration. A Go backend backed by GCP Spanner will be added later.
+
+See `REQUIREMENTS.md` for the full data model and feature specs.
 
 ## Project Structure
 
 ```
 frontend/    - React + TypeScript SPA
-backend/     - Go REST API (minimal, just a thin layer over Spanner)
+backend/     - Go REST API (future — not yet implemented)
 ```
 
 ## Principles
@@ -47,7 +49,13 @@ backend/     - Go REST API (minimal, just a thin layer over Spanner)
 - Prefer named exports over default exports.
 - One component per file.
 
-## Backend (Go)
+## Storage Layer
+
+- All data access goes through a storage interface so the implementation can be swapped without changing component code.
+- Phase 1 (current): localStorage in the browser.
+- Phase 2 (future): Go REST API + GCP Spanner.
+
+## Backend (Go) — future
 
 ### Testing
 - Use the standard `testing` package. Avoid third-party test frameworks.
@@ -67,15 +75,12 @@ backend/     - Go REST API (minimal, just a thin layer over Spanner)
 cd frontend
 bun install
 bun run dev      # development server
-bun test         # run tests
+bun run test     # run tests (uses vitest, not bun's built-in runner)
 ```
 
-### Backend
+### Backend (not yet implemented)
 ```
 cd backend
 go test ./...    # run tests
 go run .         # start server
 ```
-
-### Spanner Emulator (local development)
-Use the Spanner emulator to avoid GCP costs during development. Setup instructions TBD once infrastructure is configured.
