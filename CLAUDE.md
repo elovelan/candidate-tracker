@@ -68,6 +68,13 @@ backend/     - Go REST API (future — not yet implemented)
 - Use simple, flat package structure. Avoid deeply nested packages.
 - Error handling should be explicit and straightforward. Return errors up the call stack; handle them at the boundary.
 
+## Git Workflow
+
+- Make atomic commits. Each commit should do one thing and be meaningful on its own.
+- Separate concerns: config changes, new files/modules, tests, and implementation belong in distinct commits.
+- Write commit messages that explain "why", not "what". The diff shows what changed.
+- Use plain `git`. No jujutsu or other wrappers.
+
 ## Running the Project
 
 ### Frontend
