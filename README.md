@@ -21,6 +21,10 @@ Open this project in GitHub Codespaces or VS Code with the Dev Containers extens
 
 **For AI agent workflows**: Create one Codespace per branch/task. Each Codespace is an isolated environment, so you can run multiple agents in parallel without conflicts.
 
+### Option 3: Claude Web
+
+Claude Web uses its own devcontainer but will automatically run the SessionStart hook to install mise and all required tools when a session begins.
+
 ## Quick Start
 
 ```bash
