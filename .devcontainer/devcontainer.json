@@ -1,17 +1,20 @@
 {
   "name": "Candidate Tracker",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:22",
+  "image": "mcr.microsoft.com/devcontainers/base:debian",
 
   "features": {
-    "ghcr.io/devcontainers/features/go:1": {
-      "version": "1.23"
-    },
     "ghcr.io/devcontainers/features/git:1": {
       "version": "latest"
-    }
+    },
+    "ghcr.io/jlaundry/devcontainer-features/mise:1": {}
   },
 
-  "postCreateCommand": "curl -fsSL https://bun.sh/install | bash && cd frontend && ~/.bun/bin/bun install",
+  "onCreateCommand": "mise install",
+  "postCreateCommand": "cd frontend && mise exec -- bun install",
+
+  "mounts": [
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached"
+  ],
 
   "customizations": {
     "vscode": {
@@ -54,6 +57,6 @@
   },
 
   "remoteEnv": {
-    "PATH": "${containerEnv:PATH}:${containerEnv:HOME}/.bun/bin"
+    "PATH": "${containerEnv:PATH}:${containerEnv:HOME}/.local/share/mise/shims"
   }
 }
