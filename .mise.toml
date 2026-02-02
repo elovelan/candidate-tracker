@@ -1,6 +1,7 @@
 [tools]
 bun = "1.1.42"
 go = "1.23.5"
+github-cli = "latest"
 
 [env]
 _.path = [
