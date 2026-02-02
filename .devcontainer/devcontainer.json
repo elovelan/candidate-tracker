@@ -9,8 +9,7 @@
     "ghcr.io/jlaundry/devcontainer-features/mise:1": {}
   },
 
-  "onCreateCommand": "mise install",
-  "postCreateCommand": "cd frontend && mise exec -- bun install",
+  "updateContentCommand": "./scripts/setup-dev-env.sh",
 
   "customizations": {
     "vscode": {
