@@ -12,10 +12,6 @@
   "onCreateCommand": "mise install",
   "postCreateCommand": "cd frontend && mise exec -- bun install",
 
-  "mounts": [
-    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached"
-  ],
-
   "customizations": {
     "vscode": {
       "extensions": [
