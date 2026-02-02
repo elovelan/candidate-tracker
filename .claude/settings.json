@@ -1,0 +1,5 @@
+{
+  "hooks": {
+    "SessionStart": "./scripts/setup-dev-env.sh"
+  }
+}
