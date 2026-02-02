@@ -1,5 +1,15 @@
 {
   "hooks": {
-    "SessionStart": "./scripts/setup-dev-env.sh"
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/setup-dev-env.sh"
+          }
+        ]
+      }
+    ]
   }
 }
