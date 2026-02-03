@@ -2,7 +2,8 @@ name: Devcontainer CI
 
 on:
   push:
-    branches: ['**']
+    branches:
+      - main
     paths:
       - '.devcontainer/**'
       - 'scripts/setup-dev-env.sh'
@@ -14,6 +15,7 @@ on:
       - 'scripts/setup-dev-env.sh'
       - '.mise.toml'
       - '.github/workflows/devcontainer-ci.yml'
+  workflow_dispatch:
 
 jobs:
   test-devcontainer:

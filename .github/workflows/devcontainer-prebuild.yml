@@ -4,12 +4,14 @@ on:
   push:
     branches:
       - main
+      - 'claude/fix-devcontainer-mise-y4oXL'
     paths:
       - '.devcontainer/**'
       - 'scripts/setup-dev-env.sh'
       - '.mise.toml'
       - 'frontend/package.json'
       - 'frontend/bun.lockb'
+      - '.github/workflows/devcontainer-prebuild.yml'
   workflow_dispatch:
 
 jobs:
