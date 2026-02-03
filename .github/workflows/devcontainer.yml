@@ -1,0 +1,78 @@
+name: Devcontainer
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.devcontainer/**'
+      - 'scripts/setup-dev-env.sh'
+      - '.mise.toml'
+      - 'frontend/package.json'
+      - 'frontend/bun.lockb'
+      - '.github/workflows/devcontainer.yml'
+  pull_request:
+    paths:
+      - '.devcontainer/**'
+      - 'scripts/setup-dev-env.sh'
+      - '.mise.toml'
+      - '.github/workflows/devcontainer.yml'
+  workflow_dispatch:
+    inputs:
+      push_image:
+        description: 'Push image to GHCR'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      MANUAL_PUSH: ${{ github.event_name == 'workflow_dispatch' && inputs.push_image }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        if: env.MANUAL_PUSH == 'true' || github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and test devcontainer
+        uses: devcontainers/ci@v0.3
+        with:
+          imageName: ghcr.io/${{ github.repository }}/devcontainer
+          cacheFrom: ghcr.io/${{ github.repository }}/devcontainer
+          push: ${{ env.MANUAL_PUSH == 'true' && 'always' || 'filter' }}
+          refFilterForPush: refs/heads/main
+          eventFilterForPush: push
+          runCmd: |
+            set -x
+            # Activate mise shims for this script
+            eval "$(~/.local/bin/mise activate bash --shims)"
+
+            # Verify mise is installed and activated
+            command -v mise || exit 1
+
+            # Verify tools are available
+            command -v bun || exit 1
+            command -v go || exit 1
+            command -v gh || exit 1
+
+            # Verify tool versions
+            bun --version
+            go version
+            gh --version
+
+            # Verify frontend dependencies were installed
+            cd frontend
+            test -d node_modules || exit 1
+
+            echo "✓ Devcontainer is working correctly"
