@@ -1,32 +1,49 @@
-name: Devcontainer CI
+name: Devcontainer
 
 on:
   push:
     branches:
       - main
+      - 'claude/fix-devcontainer-mise-y4oXL'
     paths:
       - '.devcontainer/**'
       - 'scripts/setup-dev-env.sh'
       - '.mise.toml'
-      - '.github/workflows/devcontainer-ci.yml'
+      - 'frontend/package.json'
+      - 'frontend/bun.lockb'
+      - '.github/workflows/devcontainer.yml'
   pull_request:
     paths:
       - '.devcontainer/**'
       - 'scripts/setup-dev-env.sh'
       - '.mise.toml'
-      - '.github/workflows/devcontainer-ci.yml'
+      - '.github/workflows/devcontainer.yml'
   workflow_dispatch:
 
 jobs:
-  test-devcontainer:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Login to GitHub Container Registry
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build and test devcontainer
         uses: devcontainers/ci@v0.3
         with:
+          imageName: ghcr.io/${{ github.repository }}/devcontainer
+          cacheFrom: ghcr.io/${{ github.repository }}/devcontainer
+          push: ${{ github.event_name == 'push' && 'always' || 'never' }}
           runCmd: |
             # Verify mise is installed and activated
             command -v mise || exit 1
