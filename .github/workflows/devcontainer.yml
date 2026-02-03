@@ -43,8 +43,10 @@ jobs:
         with:
           imageName: ghcr.io/${{ github.repository }}/devcontainer
           cacheFrom: ghcr.io/${{ github.repository }}/devcontainer
-          push: ${{ github.event_name == 'push' && 'always' || 'never' }}
+          refFilterForPush: refs/heads/main
+          eventFilterForPush: push
           runCmd: |
+            set -x
             # Verify mise is installed and activated
             command -v mise || exit 1
 
