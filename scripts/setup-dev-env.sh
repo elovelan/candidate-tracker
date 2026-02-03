@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 
 # Install mise if not already available
 if ! command -v mise &> /dev/null; then
