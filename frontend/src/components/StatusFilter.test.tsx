@@ -2,18 +2,8 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
 import { StatusFilter } from "./StatusFilter";
-import type { ApplicationStatus } from "../types";
 
 describe("StatusFilter", () => {
-  const allStatuses: ApplicationStatus[] = [
-    "applied",
-    "interviewing",
-    "offer",
-    "rejected",
-    "withdrawn",
-    "accepted",
-  ];
-
   it("renders all status filter buttons", () => {
     render(<StatusFilter selectedStatus={null} onStatusChange={() => {}} />);
 
