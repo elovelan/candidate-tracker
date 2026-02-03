@@ -47,6 +47,9 @@ jobs:
           eventFilterForPush: push
           runCmd: |
             set -x
+            # Activate mise shims for this script
+            eval "$(~/.local/bin/mise activate bash --shims)"
+
             # Verify mise is installed and activated
             command -v mise || exit 1
 
