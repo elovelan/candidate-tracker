@@ -12,6 +12,17 @@ fi
 echo "Installing development tools via mise..."
 mise install
 
+# Activate mise in shell configs for persistent access
+if [ -f "$HOME/.bashrc" ] && ! grep -q 'mise activate' "$HOME/.bashrc"; then
+  echo 'eval "$(~/.local/bin/mise activate bash)"' >> "$HOME/.bashrc"
+  echo "Added mise activation to .bashrc"
+fi
+
+if [ -f "$HOME/.zshrc" ] && ! grep -q 'mise activate' "$HOME/.zshrc"; then
+  echo 'eval "$(~/.local/bin/mise activate zsh)"' >> "$HOME/.zshrc"
+  echo "Added mise activation to .zshrc"
+fi
+
 # Install frontend dependencies
 echo "Installing frontend dependencies..."
 cd frontend && mise exec -- bun install

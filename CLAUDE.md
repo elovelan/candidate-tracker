@@ -11,6 +11,14 @@ frontend/    - React + TypeScript SPA
 backend/     - Go REST API (future — not yet implemented)
 ```
 
+## Development Tools
+
+This project uses [mise](https://mise.jdx.dev/) to manage tool versions (Bun, Go, GitHub CLI). Tool versions are defined in `.mise.toml`.
+
+- The SessionStart hook automatically runs `scripts/setup-dev-env.sh` which installs mise and activates it in your shell config
+- After the setup script runs once, development tools (bun, go, gh) are available directly in your shell without prefixes
+- If tools aren't found, you can manually run `mise install` or use `mise exec -- <command>` as a fallback
+
 ## Principles
 
 ### Readability Above All
