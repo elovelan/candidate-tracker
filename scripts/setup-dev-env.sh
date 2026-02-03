@@ -31,4 +31,11 @@ fi
 echo "Installing frontend dependencies..."
 cd frontend && mise exec -- bun install
 
+# Ensure mise shims are in PATH for non-interactive shells
+# Add to .profile which is sourced by login shells (both interactive and non-interactive)
+if ! grep -q 'mise/shims' "$HOME/.profile" 2>/dev/null; then
+  echo 'export PATH="$HOME/.local/share/mise/shims:$PATH"' >> "$HOME/.profile"
+  echo "Added mise shims to .profile for non-interactive shell support"
+fi
+
 echo "Development environment ready!"
