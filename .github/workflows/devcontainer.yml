@@ -47,9 +47,6 @@ jobs:
           eventFilterForPush: push
           runCmd: |
             set -x
-            # Source profile to ensure mise shims are in PATH
-            [ -f "$HOME/.profile" ] && . "$HOME/.profile"
-
             # Verify mise is installed and activated
             command -v mise || exit 1
 
