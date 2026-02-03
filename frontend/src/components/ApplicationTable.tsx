@@ -1,4 +1,13 @@
+import { useState } from "react";
 import type { JobApplication } from "../types";
+
+type SortField = "companyName" | "roleName" | "status" | "score" | "salaryMin" | "updatedAt";
+type SortDirection = "asc" | "desc";
+
+interface SortState {
+  field: SortField;
+  direction: SortDirection;
+}
 
 interface ApplicationTableProps {
   applications: JobApplication[];
@@ -31,44 +40,117 @@ function formatStatus(status: string): string {
   return status.charAt(0).toUpperCase() + status.slice(1);
 }
 
+function sortApplications(
+  applications: JobApplication[],
+  sort: SortState | null
+): JobApplication[] {
+  if (!sort) return applications;
+
+  return [...applications].sort((a, b) => {
+    let comparison = 0;
+    const field = sort.field;
+
+    if (field === "companyName" || field === "roleName" || field === "status") {
+      comparison = a[field].localeCompare(b[field]);
+    } else if (field === "score") {
+      comparison = a.score - b.score;
+    } else if (field === "salaryMin") {
+      const aVal = a.salaryMin ?? 0;
+      const bVal = b.salaryMin ?? 0;
+      comparison = aVal - bVal;
+    } else if (field === "updatedAt") {
+      comparison = a.updatedAt.localeCompare(b.updatedAt);
+    }
+
+    return sort.direction === "asc" ? comparison : -comparison;
+  });
+}
+
 export function ApplicationTable({
   applications,
   onSelectApplication,
 }: ApplicationTableProps) {
+  const [sort, setSort] = useState<SortState | null>(null);
+
+  const handleSort = (field: SortField) => {
+    setSort((current) => {
+      if (current?.field === field) {
+        return current.direction === "asc"
+          ? { field, direction: "desc" }
+          : null;
+      }
+      return { field, direction: "asc" };
+    });
+  };
+
+  const sortedApplications = sortApplications(applications, sort);
+
+  const getSortIndicator = (field: SortField) => {
+    if (sort?.field !== field) return null;
+    return sort.direction === "asc" ? " ▲" : " ▼";
+  };
+
+  const headerClass =
+    "px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-300 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 select-none";
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse">
         <thead>
           <tr className="border-b border-gray-200 dark:border-gray-700">
-            <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-300">
-              Company
+            <th
+              className={headerClass}
+              onClick={() => handleSort("companyName")}
+              style={{ cursor: "pointer" }}
+            >
+              Company{getSortIndicator("companyName")}
             </th>
-            <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-300">
-              Role
+            <th
+              className={headerClass}
+              onClick={() => handleSort("roleName")}
+              style={{ cursor: "pointer" }}
+            >
+              Role{getSortIndicator("roleName")}
             </th>
-            <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-300">
-              Status
+            <th
+              className={headerClass}
+              onClick={() => handleSort("status")}
+              style={{ cursor: "pointer" }}
+            >
+              Status{getSortIndicator("status")}
             </th>
-            <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-300">
-              Score
+            <th
+              className={headerClass}
+              onClick={() => handleSort("score")}
+              style={{ cursor: "pointer" }}
+            >
+              Score{getSortIndicator("score")}
             </th>
-            <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-300">
-              Salary
+            <th
+              className={headerClass}
+              onClick={() => handleSort("salaryMin")}
+              style={{ cursor: "pointer" }}
+            >
+              Salary{getSortIndicator("salaryMin")}
             </th>
-            <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-300">
-              Updated
+            <th
+              className={headerClass}
+              onClick={() => handleSort("updatedAt")}
+              style={{ cursor: "pointer" }}
+            >
+              Updated{getSortIndicator("updatedAt")}
             </th>
           </tr>
         </thead>
         <tbody>
-          {applications.length === 0 ? (
+          {sortedApplications.length === 0 ? (
             <tr>
               <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
                 No applications yet
               </td>
             </tr>
           ) : (
-            applications.map((app) => (
+            sortedApplications.map((app) => (
               <tr
                 key={app.id}
                 onClick={() => onSelectApplication(app.id)}
