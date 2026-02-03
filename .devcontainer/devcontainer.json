@@ -5,8 +5,7 @@
   "features": {
     "ghcr.io/devcontainers/features/git:1": {
       "version": "latest"
-    },
-    "ghcr.io/jlaundry/devcontainer-features/mise:1": {}
+    }
   },
 
   "updateContentCommand": "./scripts/setup-dev-env.sh",
@@ -17,7 +16,6 @@
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "golang.go",
-        "bradlc.vscode-tailwindcss",
         "ms-vscode.vscode-typescript-next",
         "vitest.explorer"
       ],

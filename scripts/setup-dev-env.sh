@@ -12,9 +12,6 @@ fi
 echo "Installing development tools via mise..."
 mise install
 
-# Activate mise for the session
-eval "$(mise activate bash)"
-
 # Install frontend dependencies
 echo "Installing frontend dependencies..."
 cd frontend && mise exec -- bun install
