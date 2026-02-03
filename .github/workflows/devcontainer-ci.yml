@@ -1,0 +1,46 @@
+name: Devcontainer CI
+
+on:
+  push:
+    branches: ['**']
+    paths:
+      - '.devcontainer/**'
+      - 'scripts/setup-dev-env.sh'
+      - '.mise.toml'
+      - '.github/workflows/devcontainer-ci.yml'
+  pull_request:
+    paths:
+      - '.devcontainer/**'
+      - 'scripts/setup-dev-env.sh'
+      - '.mise.toml'
+      - '.github/workflows/devcontainer-ci.yml'
+
+jobs:
+  test-devcontainer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build and test devcontainer
+        uses: devcontainers/ci@v0.3
+        with:
+          runCmd: |
+            # Verify mise is installed and activated
+            command -v mise || exit 1
+
+            # Verify tools are available
+            command -v bun || exit 1
+            command -v go || exit 1
+            command -v gh || exit 1
+
+            # Verify tool versions
+            bun --version
+            go version
+            gh --version
+
+            # Verify frontend dependencies were installed
+            cd frontend
+            test -d node_modules || exit 1
+
+            echo "✓ Devcontainer is working correctly"
