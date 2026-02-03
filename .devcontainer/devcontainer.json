@@ -6,6 +6,8 @@
     "cacheFrom": "ghcr.io/elovelan/candidate-tracker/devcontainer"
   },
 
+  // Test comment to trigger prebuild workflow - will be reverted
+
   "features": {
     "ghcr.io/devcontainers/features/git:1": {
       "version": "latest"
