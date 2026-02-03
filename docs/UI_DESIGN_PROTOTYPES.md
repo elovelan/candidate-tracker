@@ -109,6 +109,82 @@ A visual pipeline view with applications organized by status in columns. Cards s
 
 ---
 
+## Variant C: Application Detail View
+
+**Status:** Not started
+**Branch:** TBD (create from `claude/ui-design-prototype-cbgAe`)
+
+### Description
+
+A dedicated view for displaying and editing a single job application. This is the screen users see when they click on a row (Table View) or card (Kanban View). It shows all application fields and manages related entities (tasks, interviews, notes).
+
+### Requirements
+
+- Display and edit all application fields (company, role, status, score, salary range)
+- Manage tasks: add new, toggle done, delete
+- Manage interviews: add new, edit, delete, show date/time and type
+- Manage notes: add new, edit, delete
+- Navigation back to list view
+- Delete application (with confirmation)
+- Auto-save or explicit save button (TBD)
+
+### Sections
+
+1. **Header** - Company name, role, status badge, score (editable)
+2. **Details** - Salary range, dates (created, last updated)
+3. **Tasks** - Checklist of action items
+4. **Interviews** - List of scheduled/past interviews with date, type, notes
+5. **Notes** - Freeform notes in reverse chronological order
+
+### Wireframe
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  ← Back to Applications                          [Delete]       │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  Acme Corp                                                      │
+│  Senior Software Engineer                    ★★★★☆ (edit)      │
+│                                                                 │
+│  Status: [Interviewing ▾]                                       │
+│  Salary: $150,000 - $180,000  [Edit]                           │
+│  Applied: Jan 15, 2025  •  Updated: Feb 1, 2025                │
+│                                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│  Tasks                                           [+ Add Task]   │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │ ☑ Submit application                                    │   │
+│  │ ☑ Complete coding assessment                            │   │
+│  │ ☐ Prepare for system design interview                   │   │
+│  │ ☐ Research team and recent projects                     │   │
+│  └─────────────────────────────────────────────────────────┘   │
+│                                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│  Interviews                                 [+ Add Interview]   │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │ Feb 5, 2025 10:00 AM  •  Technical                      │   │
+│  │ "System design round with Sr. Staff Engineer"      [Edit]│   │
+│  ├─────────────────────────────────────────────────────────┤   │
+│  │ Jan 20, 2025 2:00 PM  •  Phone Screen                   │   │
+│  │ "Went well, discussed past projects"              [Edit]│   │
+│  └─────────────────────────────────────────────────────────┘   │
+│                                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│  Notes                                          [+ Add Note]    │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │ Feb 1, 2025                                        [Edit]│   │
+│  │ Heard back from recruiter - moving to final round!      │   │
+│  ├─────────────────────────────────────────────────────────┤   │
+│  │ Jan 18, 2025                                       [Edit]│   │
+│  │ Company uses React + Go stack. Good culture reviews     │   │
+│  │ on Glassdoor. Remote-friendly.                          │   │
+│  └─────────────────────────────────────────────────────────┘   │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## Prompts for New Conversations
 
 ### Table View Prompt
@@ -169,4 +245,35 @@ I'm building a candidate tracker app. I'd like you to implement a Kanban Board U
 - One component per file, tests next to source files
 
 Please read `REQUIREMENTS.md` and `CLAUDE.md` for full context. Before building, let's discuss what information should appear on the cards.
+```
+
+### Application Detail View Prompt
+
+```
+I'm building a candidate tracker app. I'd like you to implement the Application Detail View.
+
+**Branch to work on:** Create a new branch from `claude/ui-design-prototype-cbgAe`
+
+**Foundation already in place:**
+- TypeScript types in `frontend/src/types.ts`
+- Storage layer in `frontend/src/storage/` (use `localStorageImpl`)
+- Tailwind CSS v4 configured
+- Vitest + React Testing Library for tests
+
+**Requirements:**
+- Display and edit all application fields (company, role, status, score, salary)
+- Manage tasks: add, toggle done, delete
+- Manage interviews: add, edit, delete (with date/time, type, notes)
+- Manage notes: add, edit, delete
+- Back navigation to list view
+- Delete application with confirmation
+- Follow TDD: write tests first
+
+**Project principles (from CLAUDE.md):**
+- Readability above all - self-documenting code
+- Simplicity - use common patterns, avoid cleverness
+- TDD workflow - failing test first, then implementation
+- One component per file, tests next to source files
+
+Please read `docs/UI_DESIGN_PROTOTYPES.md` for the wireframe, `REQUIREMENTS.md` for the data model, and `CLAUDE.md` for project conventions.
 ```
