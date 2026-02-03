@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 
 # Install mise if not already available
 if ! command -v mise &> /dev/null; then
@@ -8,20 +9,12 @@ if ! command -v mise &> /dev/null; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 
+# Trust the .mise.toml config file
+mise trust
+
 # Install tools defined in .mise.toml
 echo "Installing development tools via mise..."
 mise install
-
-# Activate mise in shell configs for persistent access
-if [ -f "$HOME/.bashrc" ] && ! grep -q 'mise activate' "$HOME/.bashrc"; then
-  echo 'eval "$(~/.local/bin/mise activate bash)"' >> "$HOME/.bashrc"
-  echo "Added mise activation to .bashrc"
-fi
-
-if [ -f "$HOME/.zshrc" ] && ! grep -q 'mise activate' "$HOME/.zshrc"; then
-  echo 'eval "$(~/.local/bin/mise activate zsh)"' >> "$HOME/.zshrc"
-  echo "Added mise activation to .zshrc"
-fi
 
 # Install frontend dependencies
 echo "Installing frontend dependencies..."
