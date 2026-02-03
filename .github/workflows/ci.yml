@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run tests in devcontainer
+        uses: devcontainers/ci@v0.3
+        with:
+          runCmd: |
+            cd frontend
+            bun run test
+
+      - name: Run linting with auto-fix in devcontainer
+        uses: devcontainers/ci@v0.3
+        with:
+          runCmd: |
+            cd frontend
+            bun run lint -- --fix
+
+      - name: Commit and push lint fixes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          if ! git diff --quiet; then
+            git add -A
+            git commit -m "Auto-fix linting issues
+
+          https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            git push
+            echo "Linting fixes committed and pushed"
+          else
+            echo "No linting changes to commit"
+          fi
