@@ -8,6 +8,9 @@ if ! command -v mise &> /dev/null; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 
+# Trust the .mise.toml config file
+mise trust
+
 # Install tools defined in .mise.toml
 echo "Installing development tools via mise..."
 mise install
